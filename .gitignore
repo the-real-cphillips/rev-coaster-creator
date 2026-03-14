@@ -1,0 +1,7 @@
+dist/
+__pycache__/
+*.pyc
+.env
+node_modules/
+~/.clasprc.json
+*.clasp.json
