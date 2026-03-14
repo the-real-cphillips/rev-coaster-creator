@@ -144,13 +144,19 @@ def build():
     with open(OUT_PNG, 'rb') as f:
         png_b64  = base64.b64encode(f.read()).decode()
 
+    # APPS_SCRIPT_URL injected from environment variable (set via GitHub Secret in CI)
+    apps_script_url = os.environ.get('APPS_SCRIPT_URL', '')
+    if not apps_script_url:
+        print("⚠️  Warning: APPS_SCRIPT_URL not set — form submissions will not work")
+
     print("▸ Assembling index.html...")
     with open(TEMPLATE, 'r') as f:
         template = f.read()
 
     html = template
-    html = html.replace('{{LOGO_B64}}', logo_b64)
-    html = html.replace('{{PNG_B64}}',  png_b64)
+    html = html.replace('{{LOGO_B64}}',        logo_b64)
+    html = html.replace('{{PNG_B64}}',          png_b64)
+    html = html.replace('{{APPS_SCRIPT_URL}}',  apps_script_url)
 
     with open(OUT_HTML, 'w') as f:
         f.write(html)

@@ -22,6 +22,8 @@ jobs:
 
       - name: Build site
         run: python build.py
+        env:
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
 
       - name: Verify output files exist
         run: |
