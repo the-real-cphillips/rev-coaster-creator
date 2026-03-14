@@ -36,6 +36,11 @@ jobs:
           git commit -m "deploy: ${{ github.sha }}" --allow-empty
           git push origin gh-pages
 
+      - name: Checkout main again for clasp
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -52,8 +57,6 @@ jobs:
 
       - name: Push Apps Script
         run: clasp push --force
-        working-directory: ./src
 
       - name: Redeploy Apps Script
         run: clasp deploy --deploymentId ${{ secrets.DEPLOYMENT_ID }} --description "Deploy from ${{ github.sha }}"
-        working-directory: ./src
