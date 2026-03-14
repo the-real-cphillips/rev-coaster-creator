@@ -396,6 +396,7 @@
             id="phone"
             placeholder="(555) 000-0000"
             autocomplete="tel"
+            maxlength="12"
           />
           <p class="error-msg" id="err-phone">
             Please enter your phone number.
@@ -677,6 +678,15 @@
         { passive: false },
       );
       window.addEventListener("touchend", () => (dragging = false));
+
+      // ── Phone formatter ─────────────────────────────────────────────
+      document.getElementById("phone").addEventListener("input", function (e) {
+        let val = e.target.value.replace(/\D/g, "").slice(0, 10);
+        if (val.length > 6)
+          val = val.slice(0, 3) + "-" + val.slice(3, 6) + "-" + val.slice(6);
+        else if (val.length > 3) val = val.slice(0, 3) + "-" + val.slice(3);
+        e.target.value = val;
+      });
 
       // ── Name input ────────────────────────────────────────────────
       document
