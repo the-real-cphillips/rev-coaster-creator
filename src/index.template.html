@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reverie Coaster Club — Sign Up</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0d1e24;
+        --surface: #132229;
+        --teal: #3a6b7a;
+        --teal-lt: #5a8b9a;
+        --orange: #e8865a;
+        --orange-lt: #f0a07a;
+        --cream: #f0ece4;
+        --muted: #6a8a94;
+        --border: rgba(58, 107, 122, 0.4);
+        --radius: 6px;
+        --ff-head: "Playfair Display", serif;
+        --ff-body: "Lato", sans-serif;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--cream);
+        font-family: var(--ff-body);
+        font-weight: 300;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+      }
+      body::after {
+        content: "";
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(58, 107, 122, 0.1) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
+      .card {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 480px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 2.5rem 2.5rem 2rem;
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+        animation: rise 0.6s ease both;
+      }
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .logo-wrap {
+        display: inline-block;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-bottom: 1rem;
+        box-shadow:
+          0 0 0 3px rgba(232, 134, 90, 0.3),
+          0 4px 20px rgba(0, 0, 0, 0.4);
+      }
+      .logo-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .eyebrow {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--orange);
+        margin-bottom: 0.4rem;
+      }
+      h1 {
+        font-family: var(--ff-head);
+        font-size: 2rem;
+        font-weight: 900;
+        color: var(--cream);
+        line-height: 1.1;
+      }
+      .subtitle {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.75rem;
+      }
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+      .divider span {
+        color: var(--orange);
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+      .field {
+        margin-bottom: 1.25rem;
+      }
+      label {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--teal-lt);
+        margin-bottom: 0.4rem;
+      }
+      .field-hint {
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 0.3rem;
+      }
+      input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--cream);
+        font-family: var(--ff-body);
+        font-size: 0.95rem;
+        padding: 0.7rem 0.9rem;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s,
+          background 0.2s;
+      }
+      input::placeholder {
+        color: var(--muted);
+      }
+      input:focus {
+        border-color: var(--teal);
+        background: rgba(58, 107, 122, 0.08);
+        box-shadow: 0 0 0 3px rgba(58, 107, 122, 0.15);
+      }
+      input.error {
+        border-color: #c8543a;
+        box-shadow: 0 0 0 3px rgba(200, 84, 58, 0.12);
+      }
+      .error-msg {
+        font-size: 0.72rem;
+        color: #e07a60;
+        margin-top: 0.3rem;
+        display: none;
+      }
+      .error-msg.visible {
+        display: block;
+      }
+
+      /* ── Coaster Preview ── */
+      .preview-section {
+        margin: 1.5rem 0;
+        text-align: center;
+      }
+      .preview-label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.75rem;
+      }
+      .preview-hint {
+        font-size: 0.68rem;
+        color: var(--muted);
+        margin-top: 0.5rem;
+        font-style: italic;
+      }
+
+      .coaster-scene {
+        width: 220px;
+        height: 220px;
+        perspective: 600px;
+        display: inline-block;
+        cursor: grab;
+      }
+      .coaster-scene:active {
+        cursor: grabbing;
+      }
+
+      .coaster-card {
+        width: 220px;
+        height: 220px;
+        position: relative;
+        transform-style: preserve-3d;
+        transform: rotateX(0deg) rotateY(0deg);
+        transition: none;
+      }
+
+      /* Front face — the coaster PNG + name canvas */
+      .coaster-front {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        overflow: hidden;
+        backface-visibility: hidden;
+        box-shadow:
+          0 0 0 2px rgba(232, 134, 90, 0.2),
+          0 8px 30px rgba(0, 0, 0, 0.5);
+      }
+      .coaster-front canvas {
+        display: block;
+        width: 220px;
+        height: 220px;
+      }
+
+      /* Back face — flat tan circle */
+      .coaster-back {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: #b89a6a;
+        backface-visibility: hidden;
+        transform: rotateY(180deg);
+        box-shadow:
+          0 0 0 2px rgba(232, 134, 90, 0.2),
+          0 8px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 0.85rem;
+        border: none;
+        border-radius: var(--radius);
+        font-family: var(--ff-body);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition:
+          opacity 0.2s,
+          transform 0.15s;
+        margin-top: 0.5rem;
+      }
+      .btn:hover:not(:disabled) {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+      .btn:active:not(:disabled) {
+        transform: translateY(0);
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .btn-submit {
+        background: linear-gradient(135deg, #c0622a, var(--orange));
+        color: #fff;
+        box-shadow: 0 4px 20px rgba(232, 134, 90, 0.3);
+      }
+      .state {
+        display: none;
+      }
+      .state.active {
+        display: block;
+      }
+      .success-wrap {
+        text-align: center;
+        padding: 1rem 0;
+        animation: rise 0.5s ease both;
+      }
+      .success-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 2px solid var(--orange);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+        color: var(--orange);
+      }
+      .success-wrap h2 {
+        font-family: var(--ff-head);
+        font-size: 1.6rem;
+        color: var(--cream);
+        margin-bottom: 0.5rem;
+      }
+      .success-wrap p {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+      .success-coaster-name {
+        display: inline-block;
+        margin-top: 1rem;
+        font-family: var(--ff-head);
+        font-size: 1.1rem;
+        color: var(--orange-lt);
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 0.25rem;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.7rem;
+        color: var(--muted);
+        opacity: 0.6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div id="state-form" class="state active">
+        <div class="header">
+          <div class="logo-wrap">
+            <img
+              src="data:image/jpeg;base64,{{LOGO_B64}}"
+              alt="Reverie Brewing Co."
+            />
+          </div>
+          <p class="eyebrow">Welcome to the</p>
+          <h1>Coaster Club</h1>
+          <p class="subtitle">
+            Fill in your details and we'll have your personalized coaster ready.
+          </p>
+        </div>
+        <div class="divider"><span>Your Details</span></div>
+        <div class="field">
+          <label for="fullName">Full Name</label>
+          <input
+            type="text"
+            id="fullName"
+            placeholder="Jane Smith"
+            autocomplete="name"
+          />
+          <p class="error-msg" id="err-fullName">
+            Please enter your full name.
+          </p>
+        </div>
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="jane@example.com"
+            autocomplete="email"
+          />
+          <p class="error-msg" id="err-email">
+            Please enter a valid email address.
+          </p>
+        </div>
+        <div class="field">
+          <label for="phone">Phone Number</label>
+          <input
+            type="tel"
+            id="phone"
+            placeholder="(555) 000-0000"
+            autocomplete="tel"
+          />
+          <p class="error-msg" id="err-phone">
+            Please enter your phone number.
+          </p>
+        </div>
+        <div class="field">
+          <label for="coasterName">Name on Coaster</label>
+          <input
+            type="text"
+            id="coasterName"
+            placeholder="Jane"
+            maxlength="20"
+            autocomplete="off"
+          />
+          <p class="field-hint">
+            This is what will be engraved — keep it short!
+          </p>
+          <p class="error-msg" id="err-coasterName">
+            Please enter a name for your coaster.
+          </p>
+        </div>
+
+        <div class="preview-section">
+          <p class="preview-label">Coaster Preview</p>
+          <div class="coaster-scene" id="coasterScene">
+            <div class="coaster-card" id="coasterCard">
+              <div class="coaster-front">
+                <canvas id="coasterCanvas" width="220" height="220"></canvas>
+              </div>
+              <div class="coaster-back"></div>
+            </div>
+          </div>
+          <p class="preview-hint">
+            Drag to rotate &nbsp;·&nbsp; Preview only — final engraving may vary
+          </p>
+        </div>
+
+        <button class="btn btn-submit" onclick="handleSubmit()">
+          Submit your Coaster
+        </button>
+      </div>
+
+      <div id="state-loading" class="state">
+        <div style="text-align: center; padding: 3rem 0">
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 40 40"
+            fill="none"
+            style="animation: spin 1s linear infinite; display: inline-block"
+          >
+            <style>
+              @keyframes spin {
+                from {
+                  transform: rotate(0deg);
+                }
+                to {
+                  transform: rotate(360deg);
+                }
+              }
+            </style>
+            <circle
+              cx="20"
+              cy="20"
+              r="16"
+              stroke="rgba(58,107,122,0.2)"
+              stroke-width="3"
+            />
+            <path
+              d="M20 4 A16 16 0 0 1 36 20"
+              stroke="#3a6b7a"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+          </svg>
+          <p style="margin-top: 1rem; color: var(--muted); font-size: 0.85rem">
+            Saving your details…
+          </p>
+        </div>
+      </div>
+
+      <div id="state-success" class="state">
+        <div class="success-wrap">
+          <div class="success-icon">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <h2>You're in!</h2>
+          <p>
+            Welcome to the Coaster Club. Your coaster will be engraved with:
+          </p>
+          <span class="success-coaster-name" id="success-name"></span>
+          <p style="margin-top: 1rem">
+            We'll be in touch at your email address when it's ready.
+          </p>
+        </div>
+      </div>
+
+      <div id="state-error" class="state">
+        <div class="success-wrap">
+          <div
+            class="success-icon"
+            style="border-color: #c8543a; color: #e07a60"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </div>
+          <h2>Something went wrong</h2>
+          <p>
+            We couldn't save your signup. Please try again or let the bar staff
+            know.
+          </p>
+          <button
+            class="btn"
+            style="
+              margin-top: 1.5rem;
+              background: var(--teal);
+              color: var(--cream);
+            "
+            onclick="showState('form')"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+
+      <p class="footer">
+        Your information is used only for the Coaster Club program.
+      </p>
+    </div>
+
+    <script>
+      const APPS_SCRIPT_URL = "YOURE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+      // ── Coaster canvas ────────────────────────────────────────────
+      const C = 220;
+      const canvas = document.getElementById('coasterCanvas');
+      const ctx    = canvas.getContext('2d');
+
+      const coasterImg = new Image();
+      coasterImg.src = 'data:image/png;base64,{{PNG_B64}}"px 'Playfair Display', serif";
+          ctx.letterSpacing = '2px';
+          ctx.textBaseline = 'middle';
+          ctx.textAlign = 'center';
+          ctx.fillStyle = 'rgba(108, 82, 48, 0.92)';
+
+          // Measure full string width including letterSpacing
+          const metrics  = ctx.measureText(text);
+          const totalW   = metrics.width + (2 * (text.length - 1)); // approx letterSpacing contribution
+          const totalAngle = totalW / arcR;
+          const midAngle   = Math.PI / 2 + 0.05;
+
+          // Draw each character individually but use natural char width (no manual kerning)
+          // Right-to-left iteration with -PI/2 rotation = correct bottom arc reading order
+          let angle = midAngle + totalAngle / 2;
+          for (let i = 0; i < text.length; i++) {
+            const ch = text[i];
+            const charW = ctx.measureText(ch).width + 2;
+            const charAngle = angle - (charW / 2) / arcR;
+            ctx.save();
+            ctx.translate(C/2 + arcR * Math.cos(charAngle), C/2 + arcR * Math.sin(charAngle));
+            ctx.rotate(charAngle - Math.PI / 2);
+            ctx.fillText(ch, 0, 0);
+            ctx.restore();
+            angle -= charW / arcR;
+          }
+          ctx.letterSpacing = '0px';
+        }
+
+        ctx.restore();
+      }
+
+      coasterImg.onload = () => drawCoaster('');
+      drawCoaster('');
+
+      // ── CSS 3D drag rotation ──────────────────────────────────────
+      const scene = document.getElementById('coasterScene');
+      const card  = document.getElementById('coasterCard');
+
+      let rotX = 0, rotY = 0;
+      let dragging = false, px = 0, py = 0;
+
+      function applyRotation() {
+        card.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+      }
+
+      scene.addEventListener('mousedown', e => { dragging=true; px=e.clientX; py=e.clientY; });
+      window.addEventListener('mousemove', e => {
+        if (!dragging) return;
+        rotY += (e.clientX - px) * 0.4;
+        rotX -= (e.clientY - py) * 0.4;
+        rotX  = Math.max(-45, Math.min(45, rotX));
+        px=e.clientX; py=e.clientY;
+        applyRotation();
+      });
+      window.addEventListener('mouseup', () => dragging=false);
+      scene.addEventListener('touchstart', e => { dragging=true; px=e.touches[0].clientX; py=e.touches[0].clientY; e.preventDefault(); },{passive:false});
+      window.addEventListener('touchmove', e => {
+        if (!dragging) return;
+        rotY += (e.touches[0].clientX-px)*0.4;
+        rotX -= (e.touches[0].clientY-py)*0.4;
+        rotX  = Math.max(-45,Math.min(45,rotX));
+        px=e.touches[0].clientX; py=e.touches[0].clientY;
+        applyRotation();
+        e.preventDefault();
+      },{passive:false});
+      window.addEventListener('touchend', ()=>dragging=false);
+
+      // ── Name input ────────────────────────────────────────────────
+      document.getElementById('coasterName').addEventListener('input', function() {
+        drawCoaster(this.value.trim());
+      });
+
+      // ── Form ──────────────────────────────────────────────────────
+      function showState(s) {
+        ['form','loading','success','error'].forEach(n =>
+          document.getElementById('state-'+n).classList.toggle('active', n===s)
+        );
+      }
+      function validate() {
+        let ok = true;
+        [{id:'fullName',   e:'err-fullName',    fn:v=>v.trim().length>1},
+         {id:'email',      e:'err-email',       fn:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},
+         {id:'phone',      e:'err-phone',       fn:v=>v.trim().length>6},
+         {id:'coasterName',e:'err-coasterName', fn:v=>v.trim().length>0}
+        ].forEach(({id,e,fn}) => {
+          const inp=document.getElementById(id), err=document.getElementById(e);
+          const valid=fn(inp.value);
+          inp.classList.toggle('error',!valid);
+          err.classList.toggle('visible',!valid);
+          if (!valid) ok=false;
+        });
+        return ok;
+      }
+      async function handleSubmit() {
+        if (!validate()) return;
+        showState('loading');
+        const p = {
+          fullName:    document.getElementById('fullName').value.trim(),
+          email:       document.getElementById('email').value.trim(),
+          phone:       document.getElementById('phone').value.trim(),
+          coasterName: document.getElementById('coasterName').value.trim(),
+        };
+        try {
+          const r = await fetch(APPS_SCRIPT_URL, {method:'POST', body:JSON.stringify(p), headers:{'Content-Type':'text/plain'}});
+          const j = await r.json();
+          if (j.success) { document.getElementById('success-name').textContent=p.coasterName; showState('success'); }
+          else showState('error');
+        } catch { showState('error'); }
+      }
+    </script>
+  </body>
+</html>
