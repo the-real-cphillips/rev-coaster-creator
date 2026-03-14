@@ -23,18 +23,28 @@ jobs:
       - name: Build site
         run: python build.py
 
+      - name: Stash built files outside workspace
+        run: |
+          mkdir -p /tmp/site
+          cp dist/index.html /tmp/site/index.html
+          cp dist/coaster_preview.png /tmp/site/coaster_preview.png
+          touch /tmp/site/.nojekyll
+          echo "✅ Built files stashed to /tmp/site"
+          ls -la /tmp/site
+
       - name: Deploy to gh-pages
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin gh-pages
           git checkout gh-pages
-          cp dist/index.html index.html
-          cp dist/coaster_preview.png coaster_preview.png
-          touch .nojekyll
+          cp /tmp/site/index.html index.html
+          cp /tmp/site/coaster_preview.png coaster_preview.png
+          cp /tmp/site/.nojekyll .nojekyll
           git add index.html coaster_preview.png .nojekyll
           git commit -m "deploy: ${{ github.sha }}" --allow-empty
           git push origin gh-pages
+          echo "✅ Pushed to gh-pages"
 
       - name: Checkout main again for clasp
         uses: actions/checkout@v4
