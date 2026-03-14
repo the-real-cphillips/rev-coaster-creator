@@ -41,6 +41,9 @@ jobs:
       - name: Write clasp credentials
         run: echo '${{ secrets.CLASP_CREDENTIALS }}' > ~/.clasprc.json
 
+      - name: Write clasp project config
+        run: echo '${{ secrets.CLASP_JSON }}' > .clasp.json
+
       - name: Push Apps Script
         run: clasp push --force
         working-directory: ./src
