@@ -549,25 +549,52 @@
     </div>
 
     <script>
-      const APPS_SCRIPT_URL = "YOURE_APPS_SCRIPT_WEB_APP_URL_HERE";
+      const APPS_SCRIPT_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
 
       // ── Coaster canvas ────────────────────────────────────────────
       const C = 220;
-      const canvas = document.getElementById('coasterCanvas');
-      const ctx    = canvas.getContext('2d');
+      const canvas = document.getElementById("coasterCanvas");
+      const ctx = canvas.getContext("2d");
 
       const coasterImg = new Image();
-      coasterImg.src = 'data:image/png;base64,{{PNG_B64}}"px 'Playfair Display', serif";
-          ctx.letterSpacing = '2px';
-          ctx.textBaseline = 'middle';
-          ctx.textAlign = 'center';
-          ctx.fillStyle = 'rgba(108, 82, 48, 0.92)';
+      coasterImg.src = "data:image/png;base64,{{PNG_B64}}";
+
+      function drawCoaster(name) {
+        ctx.clearRect(0, 0, C, C);
+
+        // Clip to circle
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(C / 2, C / 2, C / 2, 0, Math.PI * 2);
+        ctx.clip();
+
+        // Draw base PNG
+        if (coasterImg.complete && coasterImg.naturalWidth > 0) {
+          ctx.drawImage(coasterImg, 0, 0, C, C);
+        } else {
+          ctx.fillStyle = "#c8a87a";
+          ctx.fillRect(0, 0, C, C);
+        }
+
+        // Draw name along bottom arc if provided
+        if (name) {
+          const text = name.toUpperCase();
+          // Bottom arc: center=(110,110), arc at radius 88px (matches engraving ring in PNG)
+          // Text curves along bottom, centered at angle PI/2 (6 o'clock)
+          const arcR = 88;
+          const fontSize = 14;
+
+          ctx.font = "900 " + fontSize + "px serif";
+          ctx.letterSpacing = "2px";
+          ctx.textBaseline = "middle";
+          ctx.textAlign = "center";
+          ctx.fillStyle = "rgba(108, 82, 48, 0.92)";
 
           // Measure full string width including letterSpacing
-          const metrics  = ctx.measureText(text);
-          const totalW   = metrics.width + (2 * (text.length - 1)); // approx letterSpacing contribution
+          const metrics = ctx.measureText(text);
+          const totalW = metrics.width + 2 * (text.length - 1); // approx letterSpacing contribution
           const totalAngle = totalW / arcR;
-          const midAngle   = Math.PI / 2 + 0.05;
+          const midAngle = Math.PI / 2 + 0.05;
 
           // Draw each character individually but use natural char width (no manual kerning)
           // Right-to-left iteration with -PI/2 rotation = correct bottom arc reading order
@@ -575,97 +602,145 @@
           for (let i = 0; i < text.length; i++) {
             const ch = text[i];
             const charW = ctx.measureText(ch).width + 2;
-            const charAngle = angle - (charW / 2) / arcR;
+            const charAngle = angle - charW / 2 / arcR;
             ctx.save();
-            ctx.translate(C/2 + arcR * Math.cos(charAngle), C/2 + arcR * Math.sin(charAngle));
+            ctx.translate(
+              C / 2 + arcR * Math.cos(charAngle),
+              C / 2 + arcR * Math.sin(charAngle),
+            );
             ctx.rotate(charAngle - Math.PI / 2);
             ctx.fillText(ch, 0, 0);
             ctx.restore();
             angle -= charW / arcR;
           }
-          ctx.letterSpacing = '0px';
+          ctx.letterSpacing = "0px";
         }
 
         ctx.restore();
       }
 
-      coasterImg.onload = () => drawCoaster('');
-      drawCoaster('');
+      coasterImg.onload = () => drawCoaster("");
+      drawCoaster("");
 
       // ── CSS 3D drag rotation ──────────────────────────────────────
-      const scene = document.getElementById('coasterScene');
-      const card  = document.getElementById('coasterCard');
+      const scene = document.getElementById("coasterScene");
+      const card = document.getElementById("coasterCard");
 
-      let rotX = 0, rotY = 0;
-      let dragging = false, px = 0, py = 0;
+      let rotX = 0,
+        rotY = 0;
+      let dragging = false,
+        px = 0,
+        py = 0;
 
       function applyRotation() {
-        card.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+        card.style.transform =
+          "rotateX(" + rotX + "deg) rotateY(" + rotY + "deg)";
       }
 
-      scene.addEventListener('mousedown', e => { dragging=true; px=e.clientX; py=e.clientY; });
-      window.addEventListener('mousemove', e => {
+      scene.addEventListener("mousedown", (e) => {
+        dragging = true;
+        px = e.clientX;
+        py = e.clientY;
+      });
+      window.addEventListener("mousemove", (e) => {
         if (!dragging) return;
         rotY += (e.clientX - px) * 0.4;
         rotX -= (e.clientY - py) * 0.4;
-        rotX  = Math.max(-45, Math.min(45, rotX));
-        px=e.clientX; py=e.clientY;
+        rotX = Math.max(-45, Math.min(45, rotX));
+        px = e.clientX;
+        py = e.clientY;
         applyRotation();
       });
-      window.addEventListener('mouseup', () => dragging=false);
-      scene.addEventListener('touchstart', e => { dragging=true; px=e.touches[0].clientX; py=e.touches[0].clientY; e.preventDefault(); },{passive:false});
-      window.addEventListener('touchmove', e => {
-        if (!dragging) return;
-        rotY += (e.touches[0].clientX-px)*0.4;
-        rotX -= (e.touches[0].clientY-py)*0.4;
-        rotX  = Math.max(-45,Math.min(45,rotX));
-        px=e.touches[0].clientX; py=e.touches[0].clientY;
-        applyRotation();
-        e.preventDefault();
-      },{passive:false});
-      window.addEventListener('touchend', ()=>dragging=false);
+      window.addEventListener("mouseup", () => (dragging = false));
+      scene.addEventListener(
+        "touchstart",
+        (e) => {
+          dragging = true;
+          px = e.touches[0].clientX;
+          py = e.touches[0].clientY;
+          e.preventDefault();
+        },
+        { passive: false },
+      );
+      window.addEventListener(
+        "touchmove",
+        (e) => {
+          if (!dragging) return;
+          rotY += (e.touches[0].clientX - px) * 0.4;
+          rotX -= (e.touches[0].clientY - py) * 0.4;
+          rotX = Math.max(-45, Math.min(45, rotX));
+          px = e.touches[0].clientX;
+          py = e.touches[0].clientY;
+          applyRotation();
+          e.preventDefault();
+        },
+        { passive: false },
+      );
+      window.addEventListener("touchend", () => (dragging = false));
 
       // ── Name input ────────────────────────────────────────────────
-      document.getElementById('coasterName').addEventListener('input', function() {
-        drawCoaster(this.value.trim());
-      });
+      document
+        .getElementById("coasterName")
+        .addEventListener("input", function () {
+          drawCoaster(this.value.trim());
+        });
 
       // ── Form ──────────────────────────────────────────────────────
       function showState(s) {
-        ['form','loading','success','error'].forEach(n =>
-          document.getElementById('state-'+n).classList.toggle('active', n===s)
+        ["form", "loading", "success", "error"].forEach((n) =>
+          document
+            .getElementById("state-" + n)
+            .classList.toggle("active", n === s),
         );
       }
       function validate() {
         let ok = true;
-        [{id:'fullName',   e:'err-fullName',    fn:v=>v.trim().length>1},
-         {id:'email',      e:'err-email',       fn:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},
-         {id:'phone',      e:'err-phone',       fn:v=>v.trim().length>6},
-         {id:'coasterName',e:'err-coasterName', fn:v=>v.trim().length>0}
-        ].forEach(({id,e,fn}) => {
-          const inp=document.getElementById(id), err=document.getElementById(e);
-          const valid=fn(inp.value);
-          inp.classList.toggle('error',!valid);
-          err.classList.toggle('visible',!valid);
-          if (!valid) ok=false;
+        [
+          { id: "fullName", e: "err-fullName", fn: (v) => v.trim().length > 1 },
+          {
+            id: "email",
+            e: "err-email",
+            fn: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+          },
+          { id: "phone", e: "err-phone", fn: (v) => v.trim().length > 6 },
+          {
+            id: "coasterName",
+            e: "err-coasterName",
+            fn: (v) => v.trim().length > 0,
+          },
+        ].forEach(({ id, e, fn }) => {
+          const inp = document.getElementById(id),
+            err = document.getElementById(e);
+          const valid = fn(inp.value);
+          inp.classList.toggle("error", !valid);
+          err.classList.toggle("visible", !valid);
+          if (!valid) ok = false;
         });
         return ok;
       }
       async function handleSubmit() {
         if (!validate()) return;
-        showState('loading');
+        showState("loading");
         const p = {
-          fullName:    document.getElementById('fullName').value.trim(),
-          email:       document.getElementById('email').value.trim(),
-          phone:       document.getElementById('phone').value.trim(),
-          coasterName: document.getElementById('coasterName').value.trim(),
+          fullName: document.getElementById("fullName").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          phone: document.getElementById("phone").value.trim(),
+          coasterName: document.getElementById("coasterName").value.trim(),
         };
         try {
-          const r = await fetch(APPS_SCRIPT_URL, {method:'POST', body:JSON.stringify(p), headers:{'Content-Type':'text/plain'}});
+          const r = await fetch(APPS_SCRIPT_URL, {
+            method: "POST",
+            body: JSON.stringify(p),
+            headers: { "Content-Type": "text/plain" },
+          });
           const j = await r.json();
-          if (j.success) { document.getElementById('success-name').textContent=p.coasterName; showState('success'); }
-          else showState('error');
-        } catch { showState('error'); }
+          if (j.success) {
+            document.getElementById("success-name").textContent = p.coasterName;
+            showState("success");
+          } else showState("error");
+        } catch {
+          showState("error");
+        }
       }
     </script>
   </body>
